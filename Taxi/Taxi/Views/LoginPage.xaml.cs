@@ -31,12 +31,12 @@ namespace Taxi.Views
             });
             collectionView.ItemsSource = await Database.GetTrinkgeldAsync(Schichttag);
             Preferences.Set("Login", true);
-            Preferences.Set("Schichttag", Schichttag);
+            Preferences.Set("CurrentDatum", Schichttag);
         }
         async void LogoutButton_Clicked(object sender, EventArgs e)
         {
             Preferences.Remove("Login");
-            Preferences.Remove("Schichttag");
+            Preferences.Remove("CurrentDatum");
             await DisplayAlert("Abmeldung", "Erfolgreich Abgemeldet!", "OK");
         }
     }

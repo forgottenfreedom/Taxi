@@ -17,7 +17,7 @@ namespace Taxi.Views
         public string Datum;
         public AboutPage()
         {
-            Datum = Preferences.Get("Schichttag", "Nicht Angemeldet!");
+            Datum = Preferences.Get("CurrentDatum", "Nicht Angemeldet!");
             UpdateList();
             InitializeComponent();
         }
@@ -107,8 +107,8 @@ namespace Taxi.Views
         }
         public async void UpdateList()
         {
-            bool Angemeldet = Preferences.Get("Login", false);
             DatumLabel.Text = Datum;
+            bool Angemeldet = Preferences.Get("Login", false);
 
             if (Angemeldet)
             {
@@ -126,11 +126,10 @@ namespace Taxi.Views
                 KreditLabel.Text = KreditSum.ToString();
             }
             else return;
-
         }
         protected override void OnAppearing()
         {
-            Datum = Preferences.Get("Schichttag", "Nicht Angemeldet!");
+            Datum = Preferences.Get("CurrentDatum", "Nicht Angemeldet!");
             Console.WriteLine(Datum);
             UpdateList();
         }
