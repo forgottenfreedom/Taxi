@@ -40,20 +40,19 @@ namespace Taxi.ViewModels
             //Events.Add(DateTime.Now.AddDays(-1), new List<EventModel>(GenerateEvents(5, "Cool")));
 
             // with indexer
-            Events[DateTime.Now] = new List<EventModel>(GenerateEvents(1, "Boring"));
+            Events[DateTime.Parse("27.09.2021")] = new List<EventModel>(GenerateEvents(1, "Boring"));
         }
 
         public static async Task<List<string>> Grattler()
         {
             TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
             var getdates = await Database.GetDatesAsync();
-            //do stuff
+            
             List<string> dates = new List<string>();
             foreach (var item in getdates)
             {
-                var _item = item.ToString();
-                dates.Add(_item);
-                Console.WriteLine(_item);
+                string schichttag = item.Schichttag;
+                dates.Add(schichttag);
             }
             return dates;
         }

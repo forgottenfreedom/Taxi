@@ -1,4 +1,5 @@
 ﻿using System;
+using Xamarin.Plugin.Calendar.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -19,15 +20,5 @@ namespace Taxi.Views
         {
             InitializeComponent();
         }
-        protected async override void OnAppearing()
-        {
-            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
-            var _dates = await Database.GetDatesAsync();
-            foreach (var item in _dates)
-            {
-                Console.WriteLine(item);
-            }
-        }
-
     }
 }

@@ -156,7 +156,7 @@ namespace Taxi.Views
             var _dates = await Database.GetDatesAsync();
             foreach (var item in _dates)
             {
-                Console.WriteLine(item);
+                Console.WriteLine(item.Schichttag);
             }
         }
     }

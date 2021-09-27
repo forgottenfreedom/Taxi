@@ -32,7 +32,7 @@ namespace Taxi.Data
         }
         public Task<List<TaxiFahrpreis>> GetDatesAsync()
         {
-            return Database.QueryAsync<TaxiFahrpreis>($"SELECT [Schichttag] FROM [TaxiFahrpreis]");
+            return Database.QueryAsync<TaxiFahrpreis>($"SELECT DISTINCT [Schichttag] FROM [TaxiFahrpreis]");
         }
 
         public Task<int> SaveItemAsync(TaxiFahrpreis item)
