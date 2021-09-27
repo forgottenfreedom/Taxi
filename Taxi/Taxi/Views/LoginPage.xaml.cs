@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +13,12 @@ using Taxi.Models;
 namespace Taxi.Views
 {
 
-    public partial class LoginPage : ContentPage
+    public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
-        public static string Schichttag;
+        public static string Schichttag = "Nicht Angemeldet!";
         public LoginPage()
         {
             InitializeComponent();
-            Schichttag = "???";
-
         }
         async void LoginButton_Clicked(object sender, EventArgs e)
         {
@@ -31,8 +30,7 @@ namespace Taxi.Views
                 Schichttag = Schichttag
             });
             collectionView.ItemsSource = await Database.GetTrinkgeldAsync(Schichttag);
-            AboutPage ap = new AboutPage();
-            ap.UpdateList();
+            Console.WriteLine(Schichttag);
         }
     }
 }

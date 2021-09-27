@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace Taxi.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel: INotifyPropertyChanged
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
 
@@ -46,7 +46,7 @@ namespace Taxi.ViewModels
             var changed = PropertyChanged;
             if (changed == null)
                 return;
-
+        
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion

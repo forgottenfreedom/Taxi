@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace Taxi.Views
 {
-    public partial class AboutPage : ContentPage
+    public partial class AboutPage : ContentPage, INotifyPropertyChanged
     {
-        public string getDatum;
+        public string Datum;
         public AboutPage()
         {
-            InitializeComponent();
+            Datum = LoginPage.Schichttag;
             UpdateList();
-            getDatum = LoginPage.Schichttag;
+            InitializeComponent();
         }
         async void NormalButton_Clicked(object sender, EventArgs e)
         {
@@ -52,7 +52,7 @@ namespace Taxi.Views
         async void LeerButton_Clicked(object sender, EventArgs e)
         {
             string grattler = await DisplayActionSheet("ActionSheet: Send to?", "Cancel", null, "Email", "Twitter", "Facebook");
-            getDatum = grattler;
+            //Datum = grattler;
             UpdateList();
         }
         public async void UpdateList()
@@ -69,8 +69,13 @@ namespace Taxi.Views
             FahrgeldLabel.Text = FahrgeldSum.ToString();
             TrinkgeldLabel.Text = TrinkgelSum.ToString();
             KreditLabel.Text = KreditSum.ToString();
-            Datum.Text = getDatum;
+            DatumLabel.Text = Datum;
 
+        }
+        protected override void OnAppearing()
+        {
+            UpdateList();
+            Console.WriteLine(Datum);
         }
     }
 }

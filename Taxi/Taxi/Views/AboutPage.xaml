@@ -28,8 +28,8 @@
             </StackLayout>
         </StackLayout>
         <StackLayout>
-            <Label x:Name="Datum"
-                   Text="{Binding Datum, Mode=TwoWay}"
+            <Label x:Name="DatumLabel"
+                   Text="{Binding Datum}"
                    VerticalOptions="Center"
                    FontSize="Title">
                 <Label.BindingContext>
