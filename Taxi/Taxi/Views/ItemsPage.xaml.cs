@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Taxi.Models;
 using Taxi.ViewModels;
 using Taxi.Views;
+using Taxi.Data;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,19 +15,19 @@ namespace Taxi.Views
 {
     public partial class ItemsPage : ContentPage
     {
-        ItemsViewModel _viewModel;
-
         public ItemsPage()
         {
             InitializeComponent();
-
-            BindingContext = _viewModel = new ItemsViewModel();
         }
-
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
-            base.OnAppearing();
-            _viewModel.OnAppearing();
+            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+            var _dates = await Database.GetDatesAsync();
+            foreach (var item in _dates)
+            {
+                Console.WriteLine(item);
+            }
         }
+
     }
 }

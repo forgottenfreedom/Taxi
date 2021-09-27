@@ -24,14 +24,9 @@ namespace Taxi.Views
         {
             DateTime thisDay = DateTime.Today;
             string Schichttag = thisDay.ToString("d");
-            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
-            await Database.SaveItemAsync(new TaxiFahrpreis
-            {
-                Schichttag = Schichttag
-            });
-            collectionView.ItemsSource = await Database.GetTrinkgeldAsync(Schichttag);
             Preferences.Set("Login", true);
             Preferences.Set("CurrentDatum", Schichttag);
+            await DisplayAlert("Anmeldung", "Erfolgreich Angemeldet!", "OK");
         }
         async void LogoutButton_Clicked(object sender, EventArgs e)
         {

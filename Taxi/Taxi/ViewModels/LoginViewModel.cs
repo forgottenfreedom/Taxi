@@ -10,7 +10,7 @@ namespace Taxi.ViewModels
     {
         public LoginViewModel()
         {
-            Title = "Login";
+
         }
     }
 }

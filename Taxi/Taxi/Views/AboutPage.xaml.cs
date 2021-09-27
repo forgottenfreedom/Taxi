@@ -15,100 +15,120 @@ namespace Taxi.Views
     public partial class AboutPage : ContentPage, INotifyPropertyChanged
     {
         public string Datum;
+        public bool Angemeldet;
         public AboutPage()
         {
-            Datum = Preferences.Get("CurrentDatum", "Nicht Angemeldet!");
-            UpdateList();
             InitializeComponent();
         }
         async void NormalButton_Clicked(object sender, EventArgs e)
         {
-            string Fahrpreis = null;
-            string Gesamtgeld = await DisplayPromptAsync(title: "Gesamt", message: "Geld erhalten?", keyboard: Keyboard.Telephone);
-            if (Gesamtgeld != null)
+            if (Angemeldet)
             {
-                Fahrpreis = await DisplayPromptAsync(title: "Fahrpreis", message: "Fahrpreis?", keyboard: Keyboard.Telephone);
-                if (Fahrpreis == null) return;
-            }
-            else return;
-            
-            decimal Trinkgeld = decimal.Parse(Gesamtgeld) - decimal.Parse(Fahrpreis);
-            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
-            await Database.SaveItemAsync(new TaxiFahrpreis
-            {
-                Fahrpreis = decimal.Parse(Fahrpreis),
-                Trinkgeld = Trinkgeld,
-                Kredit = 0,
-                Schichttag = Datum,
-            }); ;
-            UpdateList();
-            await this.DisplayToastAsync("Saved!", 4000);
-        }
-        async void KreditButton_Clicked(object sender, EventArgs e)
-        {
-            string KreditBtn = await DisplayActionSheet("ActionSheet: Was machen?", "Cancel", null, "Dialyse", "AST");
-            if (KreditBtn == "Dialyse")
-            {
-                string Kredit = await DisplayPromptAsync(title: "Kredit", message: "Kredit?", keyboard: Keyboard.Telephone);
+                string Fahrpreis = null;
+                string Gesamtgeld = await DisplayPromptAsync(title: "Gesamt", message: "Geld erhalten?", keyboard: Keyboard.Telephone);
+                if (Gesamtgeld != null)
+                {
+                    Fahrpreis = await DisplayPromptAsync(title: "Fahrpreis", message: "Fahrpreis?", keyboard: Keyboard.Telephone);
+                    if (Fahrpreis == null) return;
+                }
+                else return;
+
+                decimal Trinkgeld = decimal.Parse(Gesamtgeld) - decimal.Parse(Fahrpreis);
                 TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
                 await Database.SaveItemAsync(new TaxiFahrpreis
                 {
-                    Fahrpreis = 0,
-                    Trinkgeld = 0,
-                    Kredit = decimal.Parse(Kredit),
+                    Fahrpreis = decimal.Parse(Fahrpreis),
+                    Trinkgeld = Trinkgeld,
+                    Kredit = 0,
                     Schichttag = Datum,
-                });
+                }); ;
+                UpdateList();
+                await this.DisplayToastAsync("Saved!", 4000);
             }
-            if (KreditBtn == "AST")
+            else
             {
-                string ASTTaxameter = await DisplayPromptAsync(title: "AST Taxameter", message: "Wieviel?", keyboard: Keyboard.Telephone);
-                if (ASTTaxameter != null)
+                await DisplayAlert("ERROR", "Nicht Angemeldet!", "OK");
+            }
+        }
+        async void KreditButton_Clicked(object sender, EventArgs e)
+        {
+            if (Angemeldet)
+            {
+                string KreditBtn = await DisplayActionSheet("ActionSheet: Was machen?", "Cancel", null, "Dialyse", "AST");
+                if (KreditBtn == "Dialyse")
                 {
-                    string ASTFahrpreis = await DisplayActionSheet("ActionSheet: Geld erhalten?", "Ja", "Nein");
-                    if (ASTFahrpreis == "Ja")
+                    string Kredit = await DisplayPromptAsync(title: "Kredit", message: "Kredit?", keyboard: Keyboard.Telephone);
+                    TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+                    await Database.SaveItemAsync(new TaxiFahrpreis
                     {
-                        string ASTPauschale = await DisplayPromptAsync(title: "Fahrpreis", message: "Wieviel?", keyboard: Keyboard.Telephone);
-                        decimal ASTKredit = decimal.Parse(ASTTaxameter) - decimal.Parse(ASTPauschale);
-                        TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
-                        await Database.SaveItemAsync(new TaxiFahrpreis
-                        {
-                            Fahrpreis = decimal.Parse(ASTPauschale),
-                            Trinkgeld = 0,
-                            Kredit = ASTKredit,
-                            Schichttag = Datum,
-                        });
-                    }
-                    if (ASTFahrpreis == "Nein")
-                    {
-                        TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
-                        await Database.SaveItemAsync(new TaxiFahrpreis
-                        {
-                            Fahrpreis = 0,
-                            Trinkgeld = 0,
-                            Kredit = decimal.Parse(ASTTaxameter),
-                            Schichttag = Datum,
-                        });
-                    }
-                    if (ASTFahrpreis == null) return;
+                        Fahrpreis = 0,
+                        Trinkgeld = 0,
+                        Kredit = decimal.Parse(Kredit),
+                        Schichttag = Datum,
+                    });
                 }
-                else return;
+                if (KreditBtn == "AST")
+                {
+                    string ASTTaxameter = await DisplayPromptAsync(title: "AST Taxameter", message: "Wieviel?", keyboard: Keyboard.Telephone);
+                    if (ASTTaxameter != null)
+                    {
+                        string ASTFahrpreis = await DisplayActionSheet("ActionSheet: Geld erhalten?", "Ja", "Nein");
+                        if (ASTFahrpreis == "Ja")
+                        {
+                            string ASTPauschale = await DisplayPromptAsync(title: "Fahrpreis", message: "Wieviel?", keyboard: Keyboard.Telephone);
+                            decimal ASTKredit = decimal.Parse(ASTTaxameter) - decimal.Parse(ASTPauschale);
+                            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+                            await Database.SaveItemAsync(new TaxiFahrpreis
+                            {
+                                Fahrpreis = decimal.Parse(ASTPauschale),
+                                Trinkgeld = 0,
+                                Kredit = ASTKredit,
+                                Schichttag = Datum,
+                            });
+                        }
+                        if (ASTFahrpreis == "Nein")
+                        {
+                            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+                            await Database.SaveItemAsync(new TaxiFahrpreis
+                            {
+                                Fahrpreis = 0,
+                                Trinkgeld = 0,
+                                Kredit = decimal.Parse(ASTTaxameter),
+                                Schichttag = Datum,
+                            });
+                        }
+                        if (ASTFahrpreis == null) return;
+                    }
+                    else return;
+                }
+                if (KreditBtn == null)
+                {
+                    return;
+                }
+                UpdateList();
+                await this.DisplayToastAsync("Saved!", 4000);
             }
-            if (KreditBtn == null)
+            else
             {
-                return;
+                await DisplayAlert("ERROR", "Nicht Angemeldet!", "OK");
             }
-            UpdateList();
-            await this.DisplayToastAsync("Saved!", 4000);
         }
         async void LeerButton_Clicked(object sender, EventArgs e)
         {
-            string grattler = await DisplayActionSheet("ActionSheet: Send to?", "Cancel", null, "Email", "Twitter", "Facebook");
-            UpdateList();
+            if (Angemeldet)
+            {
+                string grattler = await DisplayActionSheet("ActionSheet: Send to?", "Cancel", null, "Email", "Twitter", "Facebook");
+                UpdateList();
+            }
+            else
+            {
+                await DisplayAlert("ERROR", "Nicht Angemeldet!", "OK");
+            }
         }
         public async void UpdateList()
         {
             DatumLabel.Text = Datum;
-            bool Angemeldet = Preferences.Get("Login", false);
+            Angemeldet = Preferences.Get("Login", false);
 
             if (Angemeldet)
             {
@@ -127,11 +147,17 @@ namespace Taxi.Views
             }
             else return;
         }
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             Datum = Preferences.Get("CurrentDatum", "Nicht Angemeldet!");
-            Console.WriteLine(Datum);
+            Angemeldet = Preferences.Get("Login", false);
             UpdateList();
+            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+            var _dates = await Database.GetDatesAsync();
+            foreach (var item in _dates)
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 }

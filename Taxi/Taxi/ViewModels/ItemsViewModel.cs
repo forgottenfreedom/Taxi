@@ -1,84 +1,117 @@
-﻿using Taxi.Models;
-using Taxi.Views;
+﻿using Xamarin.Plugin.Calendar.Models;
 using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Xamarin.Forms;
+using Taxi.Models;
+using Taxi.Data;
 
 namespace Taxi.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private Item _selectedItem;
+        public ICommand TodayCommand => new Command(() => {
+            Year = DateTime.Today.Year;
+            Month = DateTime.Today.Month;
+            SelectedDate = DateTime.Today;
+        });
+        public ICommand EventSelectedCommand => new Command(async (item) => await ExecuteEventSelectedCommand(item));
 
-        public ObservableCollection<Item> Items { get; }
-        public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get; }
-        public Command<Item> ItemTapped { get; }
-
-        public ItemsViewModel()
+        public ItemsViewModel() : base()
         {
-            Title = "Browse";
-            Items = new ObservableCollection<Item>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            ItemTapped = new Command<Item>(OnItemSelected);
+            //var task = Grattler();
+            //List<string> geier = task.Result;
+            //foreach(var item in geier)
+            //{
+            //    Events.Add(DateTime.Now.AddDays(-1), new List<EventModel>(GenerateEvents(1, "Test")));
+            //}
+            // testing all kinds of adding events
+            // when initializing collection
+            Events = new EventCollection();
+            //{
+            //    [DateTime.Now.AddDays(-3)] = new List<EventModel>(GenerateEvents(10, "Cool")),
+            //};
 
-            AddItemCommand = new Command(OnAddItem);
+            // with add method
+            //Events.Add(DateTime.Now.AddDays(-1), new List<EventModel>(GenerateEvents(5, "Cool")));
+
+            // with indexer
+            Events[DateTime.Now] = new List<EventModel>(GenerateEvents(1, "Boring"));
         }
 
-        async Task ExecuteLoadItemsCommand()
+        public static async Task<List<string>> Grattler()
         {
-            IsBusy = true;
-
-            try
+            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+            var getdates = await Database.GetDatesAsync();
+            //do stuff
+            List<string> dates = new List<string>();
+            foreach (var item in getdates)
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-                }
+                var _item = item.ToString();
+                dates.Add(_item);
+                Console.WriteLine(_item);
             }
-            catch (Exception ex)
+            return dates;
+        }
+
+
+
+        private IEnumerable<EventModel> GenerateEvents(int count, string name)
+        {
+            return Enumerable.Range(1, count).Select(x => new EventModel
             {
-                Debug.WriteLine(ex);
-            }
-            finally
+                Name = $"{name} event",
+                Description = $"This is {name} event{x}'s description!"
+            });
+        }
+
+        public EventCollection Events { get; }
+
+        private int _month = DateTime.Today.Month;
+        public int Month
+        {
+            get => _month;
+            set => SetProperty(ref _month, value);
+        }
+
+        public int _year = DateTime.Today.Year;
+        public int Year
+        {
+            get => _year;
+            set => SetProperty(ref _year, value);
+        }
+
+        private DateTime? _selectedDate = DateTime.Today;
+        public DateTime? SelectedDate
+        {
+            get => _selectedDate;
+            set => SetProperty(ref _selectedDate, value);
+        }
+
+        private DateTime _minimumDate = new DateTime(2019, 4, 29);
+        public DateTime MinimumDate
+        {
+            get => _minimumDate;
+            set => SetProperty(ref _minimumDate, value);
+        }
+
+        private DateTime _maximumDate = DateTime.Today.AddMonths(5);
+        public DateTime MaximumDate
+        {
+            get => _maximumDate;
+            set => SetProperty(ref _maximumDate, value);
+        }
+
+        private async Task ExecuteEventSelectedCommand(object item)
+        {
+            if (item is EventModel eventModel)
             {
-                IsBusy = false;
+                await App.Current.MainPage.DisplayAlert(eventModel.Name, eventModel.Description, "Ok");
             }
-        }
-
-        public void OnAppearing()
-        {
-            IsBusy = true;
-            SelectedItem = null;
-        }
-
-        public Item SelectedItem
-        {
-            get => _selectedItem;
-            set
-            {
-                SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
-            }
-        }
-
-        private async void OnAddItem(object obj)
-        {
-            await Shell.Current.GoToAsync(nameof(NewItemPage));
-        }
-
-        async void OnItemSelected(Item item)
-        {
-            if (item == null)
-                return;
-
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
         }
     }
 }

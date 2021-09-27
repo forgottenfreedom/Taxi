@@ -11,7 +11,6 @@ namespace Taxi.ViewModels
     {
         public AboutViewModel()
         {
-            Title = "Main";
         }
     }
 }

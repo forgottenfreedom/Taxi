@@ -30,18 +30,9 @@ namespace Taxi.Data
         {
             return Database.QueryAsync<TaxiFahrpreis>($"SELECT [{param1}] FROM [TaxiFahrpreis] WHERE [Schichttag] = '{param2}'");
         }
-        public Task<List<TaxiFahrpreis>> GetTrinkgeldAsync(string param1)
+        public Task<List<TaxiFahrpreis>> GetDatesAsync()
         {
-            return Database.QueryAsync<TaxiFahrpreis>($"SELECT * FROM [TaxiFahrpreis] WHERE [Schichttag] = '{param1}'");
-        }
-        public Task<List<TaxiFahrpreis>> GetKreditAsync()
-        {
-            return Database.QueryAsync<TaxiFahrpreis>("SELECT [Kredit] FROM [TaxiFahrpreis]");
-        }
-
-        public Task<TaxiFahrpreis> GetItemAsync(int id)
-        {
-            return Database.Table<TaxiFahrpreis>().Where(i => i.ID == id).FirstOrDefaultAsync();
+            return Database.QueryAsync<TaxiFahrpreis>($"SELECT [Schichttag] FROM [TaxiFahrpreis]");
         }
 
         public Task<int> SaveItemAsync(TaxiFahrpreis item)
