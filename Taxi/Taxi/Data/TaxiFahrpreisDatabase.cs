@@ -26,9 +26,9 @@ namespace Taxi.Data
             return Database.Table<TaxiFahrpreis>().ToListAsync();
         }
 
-        public Task<List<TaxiFahrpreis>> GetFahrpreisAsync(string param1)
+        public Task<List<TaxiFahrpreis>> GetFahrpreisAsync(string param1, string param2)
         {
-            return Database.QueryAsync<TaxiFahrpreis>($"SELECT [{param1}] FROM [TaxiFahrpreis]");
+            return Database.QueryAsync<TaxiFahrpreis>($"SELECT [{param1}] FROM [TaxiFahrpreis] WHERE [Schichttag] = '{param2}'");
         }
         public Task<List<TaxiFahrpreis>> GetTrinkgeldAsync(string param1)
         {

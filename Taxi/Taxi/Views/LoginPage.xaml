@@ -9,6 +9,7 @@
     <ContentPage.Content>
         <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
             <Button VerticalOptions="Center" Text="Anmelden" Clicked="LoginButton_Clicked"/>
+            <Button VerticalOptions="Center" Text="Abmelden" Clicked="LogoutButton_Clicked"/>
             <Label x:Name="Anmeldung"
                    Text=""/>
             <CollectionView x:Name="collectionView">
