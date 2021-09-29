@@ -20,12 +20,6 @@ namespace Taxi.Data
         {
             Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
         }
-
-        public Task<List<TaxiFahrpreis>> GetItemsAsync()
-        {
-            return Database.Table<TaxiFahrpreis>().ToListAsync();
-        }
-
         public Task<List<TaxiFahrpreis>> GetFahrpreisAsync(string param1, string param2)
         {
             return Database.QueryAsync<TaxiFahrpreis>($"SELECT [{param1}] FROM [TaxiFahrpreis] WHERE [Schichttag] = '{param2}'");
@@ -33,6 +27,10 @@ namespace Taxi.Data
         public Task<List<TaxiFahrpreis>> GetDatesAsync()
         {
             return Database.QueryAsync<TaxiFahrpreis>($"SELECT DISTINCT [Schichttag] FROM [TaxiFahrpreis]");
+        }
+        public Task<List<TaxiFahrpreis>> GetMonthlySum(string param1, string param2)
+        {
+            return Database.QueryAsync<TaxiFahrpreis>($"SELECT [{param1}] FROM [TaxiFahrpreis] WHERE [Schichttag] LIKE '%{param2}'");
         }
 
         public Task<int> SaveItemAsync(TaxiFahrpreis item)

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Taxi.Models;
 using Taxi.Data;
+using Taxi.Views;
 
 namespace Taxi.ViewModels
 {
@@ -19,60 +20,42 @@ namespace Taxi.ViewModels
             SelectedDate = DateTime.Today;
         });
         public ICommand EventSelectedCommand => new Command(async (item) => await ExecuteEventSelectedCommand(item));
-        public List<string> dates = new List<string>();
-
+        public ICommand Navigate => new Command(async () => await DoNavigate());
+        public ICommand PageAppearingCommand => new Command(async () => await GiveMeDbThings());
         public ItemsViewModel()
         {
             Task.Run(async () => { await GiveMeDbThings(); });
-            foreach (var gratttler in dates)
-            {
-                Console.WriteLine(gratttler);
-                Console.WriteLine("Test");
-            };
-            Console.WriteLine("this should be below");
-            Console.WriteLine(dates);
-            //var task = Grattler();
-            //List<string> geier = task.Result;
-            //foreach(var item in geier)
-            //{
-            //    Events.Add(DateTime.Now.AddDays(-1), new List<EventModel>(GenerateEvents(1, "Test")));
-            //}
-            // testing all kinds of adding events
-            // when initializing collection
             Events = new EventCollection();
-            //{
-            //    [DateTime.Now.AddDays(-3)] = new List<EventModel>(GenerateEvents(10, "Cool")),
-            //};
-
-            // with add method
-            //Events.Add(DateTime.Now.AddDays(-1), new List<EventModel>(GenerateEvents(5, "Cool")));
-
-            // with indexer
-            Events[DateTime.Parse("27.09.2021")] = new List<EventModel>(GenerateEvents(1, "Boring"));
         }
-
-        private async Task GiveMeDbThings()
+        public async Task GiveMeDbThings()
         {
-            Console.WriteLine("Was Passiert mit mir?");
             TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+
             var getdates = await Database.GetDatesAsync();
             foreach (var item in getdates)
             {
                 string schichttag = item.Schichttag;
-                dates.Add(schichttag);
-                Console.WriteLine("this should be on top");
-                Console.WriteLine(schichttag);
+                var Fahrgeld = await Database.GetFahrpreisAsync("FahrPreis", schichttag);
+                var Trinkgeld = await Database.GetFahrpreisAsync("Trinkgeld", schichttag);
+                var Kredit = await Database.GetFahrpreisAsync("Kredit", schichttag);
+
+                decimal FahrgeldSum = Fahrgeld.Select(g => g.Fahrpreis).Sum();
+                decimal TrinkgelSum = Trinkgeld.Select(g => g.Trinkgeld).Sum();
+                decimal KreditSum = Kredit.Select(g => g.Kredit).Sum();
+
+                Events[DateTime.Parse(schichttag)] = new List<EventModel>(GenerateEvents(1, FahrgeldSum, TrinkgelSum, KreditSum));
             }
         }
 
 
 
-        private IEnumerable<EventModel> GenerateEvents(int count, string name)
+        private IEnumerable<EventModel> GenerateEvents(int count, decimal Fahrpreis, decimal Trinkgeld, decimal Kredit)
         {
             return Enumerable.Range(1, count).Select(x => new EventModel
             {
-                Name = $"{name} event",
-                Description = $"This is {name} event{x}'s description!"
+                Fahrpreis = Fahrpreis,
+                Trinkgeld = Trinkgeld,
+                Kredit = Kredit,
             });
         }
 
@@ -117,8 +100,14 @@ namespace Taxi.ViewModels
         {
             if (item is EventModel eventModel)
             {
-                await App.Current.MainPage.DisplayAlert(eventModel.Name, eventModel.Description, "Ok");
+                decimal Money = (eventModel.Fahrpreis + eventModel.Kredit) * 0.4m;
+
+                await App.Current.MainPage.DisplayAlert("Netto", Money.ToString(), "Ok");
             }
+        }
+        private async Task DoNavigate()
+        {
+            await Xamarin.Forms.Application.Current.MainPage.Navigation.PushAsync(new ItemDetailPage(Month, Year));
         }
     }
 }

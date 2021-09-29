@@ -10,8 +10,15 @@
              xmlns:plugin="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
              x:Name="BrowseItemsPage"
              xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              >
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding Navigate}" Text="Komplett" />
         <ToolbarItem Command="{Binding TodayCommand}" Text="Today" />
     </ContentPage.ToolbarItems>
     <ContentPage.BindingContext>
@@ -30,21 +37,57 @@
         VerticalOptions="FillAndExpand">
         <plugin:Calendar.EventTemplate>
             <DataTemplate>
-                <StackLayout
-                    Padding="15,0,0,0"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="FillAndExpand">
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        Text="{Binding Name}"
-                        TextColor="HotPink"
-                    />
-                    <Label
-                        FontSize="Small"
-                        LineBreakMode="WordWrap"
-                        Text="{Binding Description}" 
-                    />
+                <StackLayout Orientation="Horizontal">
+                    <Grid ColumnDefinitions="Auto, *, *">
+                        <Frame  Grid.Column="0"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                            <Grid RowDefinitions="Auto, Auto">
+                                <Label  Grid.Row="0"
+                                        Text="Fahrpreis"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                                <Label  Grid.Row="1"
+                                        x:Name="FahrgeldLabel"    
+                                        Text="{Binding Fahrpreis}"
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+                        <Frame  Grid.Column="1"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                            <Grid RowDefinitions="Auto, Auto">
+                                <Label  Grid.Row="0"
+                                        Text="Trinkgeld"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                                <Label Grid.Row="1"
+                                        x:Name="TrinkgeldLabel"
+                                        Text="{Binding Trinkgeld}"
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+                        <Frame  Grid.Column="2"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                            <Grid RowDefinitions="Auto, Auto">
+                                <Label  Grid.Row="0"
+                                        Text="Kredit"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                                <Label  Grid.Row="1"
+                                        x:Name="KreditLabel"
+                                        Text="{Binding Kredit}"
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+                    </Grid>
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BindingContext.EventSelectedCommand, Source={x:Reference BrowseItemsPage}}" CommandParameter="{Binding .}" />
                     </StackLayout.GestureRecognizers>

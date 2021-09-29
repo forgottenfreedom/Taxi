@@ -4,11 +4,125 @@
              x:Class="Taxi.Views.ItemDetailPage"
              Title="{Binding Title}">
 
-    <StackLayout Spacing="20" Padding="15">
-        <Label Text="Text:" FontSize="Medium" />
-        <Label Text="{Binding Text}" FontSize="Small"/>
-        <Label Text="Description:" FontSize="Medium" />
-        <Label Text="{Binding Description}" FontSize="Small"/>
+    <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
+        <StackLayout Orientation="Horizontal">
+            <Grid ColumnDefinitions="Auto, *, *">
+                <Frame  Grid.Column="0"
+                        Grid.Row="0"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                    <Grid RowDefinitions="Auto, Auto">
+                        <Label  Grid.Row="0"
+                                        Text="Fahrpreis"
+                                        HorizontalTextAlignment="Center"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                        <Label  Grid.Row="1"
+                                        x:Name="FahrgeldLabel"
+                                        HorizontalTextAlignment="Center"
+                                        Text=""
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+                <Frame  Grid.Column="0"
+                        Grid.Row="2"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                    <Grid RowDefinitions="Auto, Auto">
+                        <Label  Grid.Row="0"
+                                        Text="Netto"
+                                        HorizontalTextAlignment="Center"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                        <Label  Grid.Row="1"
+                                        x:Name="Nettolabel"
+                                        HorizontalTextAlignment="Center"
+                                        Text=""
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+                <Frame  Grid.Column="1"
+                        Grid.Row="0"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                    <Grid RowDefinitions="Auto, Auto">
+                        <Label  Grid.Row="0"
+                                        Text="Trinkgeld"
+                                        HorizontalTextAlignment="Center"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                        <Label Grid.Row="1"
+                                        x:Name="TrinkgeldLabel"
+                                        HorizontalTextAlignment="Center"
+                                        Text=""
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+                <Frame  Grid.Column="2"
+                        Grid.Row="2"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                    <Grid RowDefinitions="Auto, Auto">
+                        <Label  Grid.Row="0"
+                                        Text="Mit TK"
+                                        HorizontalTextAlignment="Center"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                        <Label  Grid.Row="1"
+                                        x:Name="Nettotklabel"
+                                        HorizontalTextAlignment="Center"
+                                        Text=""
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+                <Frame  Grid.Column="2"
+                        Grid.Row="0"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                    <Grid RowDefinitions="Auto, Auto">
+                        <Label  Grid.Row="0"
+                                        Text="Kredit"
+                                        HorizontalTextAlignment="Center"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                        <Label  Grid.Row="1"
+                                        x:Name="KreditLabel"
+                                        HorizontalTextAlignment="Center"
+                                        Text=""
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+                <Frame  Grid.Column="0"
+                        Grid.Row="5"
+                                BorderColor="Black"
+                                Padding="5"
+                                CornerRadius="10">
+                    <Grid RowDefinitions="Auto, Auto">
+                        <Label  Grid.Row="0"
+                                        Text="Zu Zahlen"
+                                        HorizontalTextAlignment="Center"
+                                        FontSize="Medium"
+                                        VerticalOptions="Center"/>
+                        <Label  Grid.Row="1"
+                                        x:Name="ZuZahlenLabel"
+                                        HorizontalTextAlignment="Center"
+                                        Text=""
+                                        FontSize="Small"
+                                        VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+            </Grid>
+        </StackLayout>
     </StackLayout>
-    
+
 </ContentPage>

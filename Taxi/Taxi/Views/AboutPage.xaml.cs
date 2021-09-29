@@ -127,7 +127,6 @@ namespace Taxi.Views
         }
         public async void UpdateList()
         {
-            DatumLabel.Text = Datum;
             Angemeldet = Preferences.Get("Login", false);
 
             if (Angemeldet)
@@ -145,19 +144,19 @@ namespace Taxi.Views
                 TrinkgeldLabel.Text = TrinkgelSum.ToString();
                 KreditLabel.Text = KreditSum.ToString();
             }
-            else return;
+            else
+            {
+                FahrgeldLabel.Text = "0";
+                TrinkgeldLabel.Text = "0";
+                KreditLabel.Text = "0";
+            }
         }
-        protected async override void OnAppearing()
+        protected override void OnAppearing()
         {
             Datum = Preferences.Get("CurrentDatum", "Nicht Angemeldet!");
+            DatumLabel.Text = Datum;
             Angemeldet = Preferences.Get("Login", false);
             UpdateList();
-            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
-            var _dates = await Database.GetDatesAsync();
-            foreach (var item in _dates)
-            {
-                Console.WriteLine(item.Schichttag);
-            }
         }
     }
 }

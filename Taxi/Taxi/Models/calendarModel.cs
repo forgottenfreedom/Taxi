@@ -3,7 +3,8 @@ namespace Taxi.Models
 {
     public class EventModel
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public decimal Fahrpreis { get; set; }
+        public decimal Trinkgeld { get; set; }
+        public decimal Kredit { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Taxi.ViewModels
 {
-    public class AboutViewModel : BaseViewModel, INotifyPropertyChanged
+    public class AboutViewModel : BaseViewModel
     {
         public AboutViewModel()
         {

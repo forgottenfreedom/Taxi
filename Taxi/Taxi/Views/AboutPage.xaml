@@ -28,14 +28,13 @@
             </StackLayout>
         </StackLayout>
         <StackLayout>
-            <Label x:Name="DatumLabel"
+            <Label Grid.Row="1" 
+                   x:Name="DatumLabel"
                    Text=""
                    VerticalOptions="Center"
+                   HorizontalTextAlignment="Center"
                    FontSize="Title">
-                <Label.BindingContext>
-                    <vm:AboutViewModel />
-                </Label.BindingContext>
-            </Label>
+                </Label>
         </StackLayout>
         <ScrollView Grid.Row="1">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
