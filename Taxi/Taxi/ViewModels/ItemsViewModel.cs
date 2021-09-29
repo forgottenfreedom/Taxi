@@ -19,10 +19,18 @@ namespace Taxi.ViewModels
             SelectedDate = DateTime.Today;
         });
         public ICommand EventSelectedCommand => new Command(async (item) => await ExecuteEventSelectedCommand(item));
+        public List<string> dates = new List<string>();
 
-        public ItemsViewModel() : base()
+        public ItemsViewModel()
         {
-
+            Task.Run(async () => { await GiveMeDbThings(); });
+            foreach (var gratttler in dates)
+            {
+                Console.WriteLine(gratttler);
+                Console.WriteLine("Test");
+            };
+            Console.WriteLine("this should be below");
+            Console.WriteLine(dates);
             //var task = Grattler();
             //List<string> geier = task.Result;
             //foreach(var item in geier)
@@ -43,18 +51,18 @@ namespace Taxi.ViewModels
             Events[DateTime.Parse("27.09.2021")] = new List<EventModel>(GenerateEvents(1, "Boring"));
         }
 
-        public static async Task<List<string>> Grattler()
+        private async Task GiveMeDbThings()
         {
+            Console.WriteLine("Was Passiert mit mir?");
             TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
             var getdates = await Database.GetDatesAsync();
-            
-            List<string> dates = new List<string>();
             foreach (var item in getdates)
             {
                 string schichttag = item.Schichttag;
                 dates.Add(schichttag);
+                Console.WriteLine("this should be on top");
+                Console.WriteLine(schichttag);
             }
-            return dates;
         }
 
 
