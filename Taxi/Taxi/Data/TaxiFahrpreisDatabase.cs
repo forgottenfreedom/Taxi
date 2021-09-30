@@ -32,6 +32,10 @@ namespace Taxi.Data
         {
             return Database.QueryAsync<TaxiFahrpreis>($"SELECT [{param1}] FROM [TaxiFahrpreis] WHERE [Schichttag] LIKE '%{param2}'");
         }
+        public Task<List<TaxiFahrpreis>> GetListStuff(string param1)
+        {
+            return Database.QueryAsync<TaxiFahrpreis>($"SELECT * FROM [TaxiFahrpreis] WHERE [Schichttag] = '{param1}'");
+        }
 
         public Task<int> SaveItemAsync(TaxiFahrpreis item)
         {

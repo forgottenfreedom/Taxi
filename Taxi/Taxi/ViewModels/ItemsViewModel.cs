@@ -102,7 +102,8 @@ namespace Taxi.ViewModels
             {
                 decimal Money = (eventModel.Fahrpreis + eventModel.Kredit) * 0.4m;
 
-                await App.Current.MainPage.DisplayAlert("Netto", Money.ToString(), "Ok");
+                string day = SelectedDate.ToString().Substring(0, 10);
+                await Xamarin.Forms.Application.Current.MainPage.Navigation.PushAsync(new EventDetailPage(day, Money));
             }
         }
         private async Task DoNavigate()

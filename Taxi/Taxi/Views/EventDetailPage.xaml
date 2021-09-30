@@ -1,43 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Taxi.Views.ItemsPage"
-             Title="Kalender"
-             xmlns:local="clr-namespace:Taxi.ViewModels"  
-             xmlns:model="clr-namespace:Taxi.Models"  
-             xmlns:vm="clr-namespace:Taxi.ViewModels"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:plugin="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
-             x:Name="BrowseItemsPage"
-             xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             >
-    <ContentPage.Behaviors>
-        <xct:EventToCommandBehavior
-            EventName="Appearing"
-            Command="{Binding PageAppearingCommand}" />
-    </ContentPage.Behaviors>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding Navigate}" Text="Komplett" />
-        <ToolbarItem Command="{Binding TodayCommand}" Text="Today" />
-    </ContentPage.ToolbarItems>
-    <ContentPage.BindingContext>
-        <vm:ItemsViewModel/>
-    </ContentPage.BindingContext>
+             mc:Ignorable="d"
+             x:Class="Taxi.Views.EventDetailPage">
 
-    <plugin:Calendar
-        Events="{Binding Events}"
-        MaximumDate="{Binding MaximumDate}"
-        MinimumDate="{Binding MinimumDate}"
-        Month="{Binding Month}"
-        SelectedDate="{Binding SelectedDate}"
-        Year="{Binding Year}"
-        Padding="10,0"
-        HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand">
-        <plugin:Calendar.EventTemplate>
+    <CollectionView x:Name="Gratttler">
+        <CollectionView.Header>
+            <Label Margin="10,5,0,5"
+                   x:Name="Header"
+                   Text=""
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center">
+                
+            </Label>
+        </CollectionView.Header>
+        <CollectionView.ItemTemplate>
             <DataTemplate>
-                <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal" Padding="40,5,20,5">
                     <Grid ColumnDefinitions="Auto, *, *">
                         <Frame  Grid.Column="0"
                                 BorderColor="Black"
@@ -88,12 +70,9 @@
                             </Grid>
                         </Frame>
                     </Grid>
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding BindingContext.EventSelectedCommand, Source={x:Reference BrowseItemsPage}}" CommandParameter="{Binding .}" />
-                    </StackLayout.GestureRecognizers>
                 </StackLayout>
             </DataTemplate>
-        </plugin:Calendar.EventTemplate>
-    </plugin:Calendar>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 
 </ContentPage>
