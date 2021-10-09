@@ -54,37 +54,47 @@ namespace Taxi.Views
         {
             if (Angemeldet)
             {
-                string KreditBtn = await DisplayActionSheet("ActionSheet: Was machen?", "Cancel", null, "Dialyse", "AST");
+                string KreditBtn = await DisplayActionSheet("Was machen?", "Cancel", null, "Dialyse", "AST");
                 if (KreditBtn == "Dialyse")
                 {
                     string Kredit = await DisplayPromptAsync(title: "Kredit", message: "Kredit?", keyboard: Keyboard.Telephone);
-                    TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
-                    await Database.SaveItemAsync(new TaxiFahrpreis
+
+                    if (Kredit == null) return;
+                    else
                     {
-                        Fahrpreis = 0,
-                        Trinkgeld = 0,
-                        Kredit = decimal.Parse(Kredit),
-                        Schichttag = Datum,
-                    });
+
+                        TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+                        await Database.SaveItemAsync(new TaxiFahrpreis
+                        {
+                            Fahrpreis = 0,
+                            Trinkgeld = 0,
+                            Kredit = decimal.Parse(Kredit),
+                            Schichttag = Datum,
+                        });
+                    };
                 }
                 if (KreditBtn == "AST")
                 {
                     string ASTTaxameter = await DisplayPromptAsync(title: "AST Taxameter", message: "Wieviel?", keyboard: Keyboard.Telephone);
                     if (ASTTaxameter != null)
                     {
-                        string ASTFahrpreis = await DisplayActionSheet("ActionSheet: Geld erhalten?", "Ja", "Nein");
+                        string ASTFahrpreis = await DisplayActionSheet("Geld erhalten?", "Ja", "Nein");
                         if (ASTFahrpreis == "Ja")
                         {
                             string ASTPauschale = await DisplayPromptAsync(title: "Fahrpreis", message: "Wieviel?", keyboard: Keyboard.Telephone);
-                            decimal ASTKredit = decimal.Parse(ASTTaxameter) - decimal.Parse(ASTPauschale);
-                            TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
-                            await Database.SaveItemAsync(new TaxiFahrpreis
+                            if (ASTPauschale == null) return;
+                            else
                             {
-                                Fahrpreis = decimal.Parse(ASTPauschale),
-                                Trinkgeld = 0,
-                                Kredit = ASTKredit,
-                                Schichttag = Datum,
-                            });
+                                decimal ASTKredit = decimal.Parse(ASTTaxameter) - decimal.Parse(ASTPauschale);
+                                TaxiFahrpreisDatabase Database = await TaxiFahrpreisDatabase.Instance;
+                                await Database.SaveItemAsync(new TaxiFahrpreis
+                                {
+                                    Fahrpreis = decimal.Parse(ASTPauschale),
+                                    Trinkgeld = 0,
+                                    Kredit = ASTKredit,
+                                    Schichttag = Datum,
+                                });
+                            };
                         }
                         if (ASTFahrpreis == "Nein")
                         {
